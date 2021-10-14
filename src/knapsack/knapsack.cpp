@@ -52,7 +52,8 @@ void solve(const Item* items, int n, int W, bool print = false) {
         if (i == n - 1) {
             for (int j = 0; j < m; j++) {
                 tables[i].w[j] = j;
-                if (j >= items[i].w) {
+                bool enough_space = j >= items[i].w;
+                if (enough_space) {
                     tables[i].v[j] = items[i].v;
                     tables[i].c[j] = true;
                 } else {
@@ -68,14 +69,14 @@ void solve(const Item* items, int n, int W, bool print = false) {
                 j = W;
             }
             tables[i].w[j] = j;
-            if (j >= items[i].w) {
-                if (items[i].v + tables[i+1].v[j-items[i].w] >= tables[i+1].v[j]) {
-                    tables[i].v[j] = items[i].v + tables[i+1].v[j-items[i].w];
-                    tables[i].c[j] = true;
-                } else {
-                    tables[i].v[j] = tables[i+1].v[j];
-                    tables[i].c[j] = false;
-                }
+            bool enough_space = j >= items[i].w;
+            bool adding_is_more_profitable = (
+                    items[i].v + tables[i+1].v[j-items[i].w]
+                 >= tables[i+1].v[j]
+            );
+            if (enough_space && adding_is_more_profitable) {
+                tables[i].v[j] = items[i].v + tables[i+1].v[j-items[i].w];
+                tables[i].c[j] = true;
             } else {
                 tables[i].v[j] = tables[i+1].v[j];
                 tables[i].c[j] = false;
