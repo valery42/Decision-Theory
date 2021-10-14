@@ -44,21 +44,21 @@ void solve(const Item* items, int n, int W, bool print = false) {
         init_table(&tables[i], m);
     }
 
-    for (int i = n - 1; i >= 0; i--) {
-        if (i == n - 1) {
-            for (int j = 0; j < m; j++) {
-                tables[i].w[j] = j;
-                bool enough_space = j >= items[i].w;
-                if (enough_space) {
-                    tables[i].v[j] = items[i].v;
-                    tables[i].c[j] = true;
-                } else {
-                    tables[i].v[j] = 0;
-                    tables[i].c[j] = false;
-                }
-            }
-            continue;
+    // fill out the last table
+    for (int j = 0; j < m; j++) {
+        tables[n-1].w[j] = j;
+        bool enough_space = j >= items[n-1].w;
+        if (enough_space) {
+            tables[n-1].v[j] = items[n-1].v;
+            tables[n-1].c[j] = true;
+        } else {
+            tables[n-1].v[j] = 0;
+            tables[n-1].c[j] = false;
         }
+    }
+
+    // fill out the rest
+    for (int i = n - 2; i >= 0; i--) {
         int j;
         if (i == 0) {
             j = W;
