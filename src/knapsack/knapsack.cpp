@@ -35,9 +35,8 @@ void print_table(Table* table, int n) {
 }
 
 void solve(const Item* items, int n, int W, bool print = false) {
-    // items - array of items
+    // W - a maximum weight capacity
     // n - # of items (tables)
-    // W - # maximum weight capacity
     // m - # of rows in a table
     int m = W + 1;
     Table tables[n];
