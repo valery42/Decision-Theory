@@ -1,8 +1,5 @@
 #include <cstdio>
 
-const int N = 4;
-const int W = 3;
-
 using weight = int;
 using value = double;
 using control = bool;
@@ -15,7 +12,7 @@ struct Item {
 struct Table {
     weight* w;
     value* v;
-    control *c;
+    control* c;
 };
 
 void init_table(Table* table, int n) {
@@ -111,6 +108,8 @@ void solve(const Item* items, int n, int W, bool print = false) {
 }
 
 int main() {
+    const weight W = 3;
+    const int N = 4;
     Item items[N] = {
         {1, 2},
         {1, 3},
