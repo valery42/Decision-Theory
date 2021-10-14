@@ -63,11 +63,13 @@ void solve(const Item* items, int n, int W, bool print = false) {
             }
             continue;
         }
-        for (int j = 0; j < m; j++) {
-            if (i == 0) {
-                // skip the first W rows
-                j = W;
-            }
+        int j;
+        if (i == 0) {
+            j = W;
+            goto SKIP_LABEL; // skip the first W rows
+        }
+        for (j = 0; j < m; j++) {
+        SKIP_LABEL:
             tables[i].w[j] = j;
             bool enough_space = j >= items[i].w;
             bool adding_is_more_profitable = (
