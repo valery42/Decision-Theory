@@ -31,7 +31,7 @@ void delete_stage(Stage* s) {
 }
 
 void print_stage(const Stage* s, int n) {
-    // n must be equal to N + 1
+    // n must be equal to N+1
     for (int i = 0; i < n; i++) {
         printf("%6.2f, %6.2f, %6.2f\n", s->K[i], s->w[i], s->X[i]);
     }
