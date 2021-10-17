@@ -126,7 +126,7 @@ void solve(Money K, int m, bool print_tables = false) {
 
     Money total_income = stages[0].w[N];
     Money x = stages[0].X[N];
-    Money y = stages[0].K[N] - stages[0].X[N];
+    Money y = stages[0].K[N] - x;
     printf("Total income: %.2f\n", total_income);
     printf("\tStage 1: X=%6.2f, Y=%6.2f\n", x, y);
     for (int i = 0; i < m - 1; i++) {
@@ -136,7 +136,7 @@ void solve(Money K, int m, bool print_tables = false) {
             idx++;
         }
         x = stages[i+1].X[idx-1];
-        y = stages[i+1].K[idx-1] - stages[i+1].X[idx-1];;
+        y = stages[i+1].K[idx-1] - x;
         printf("\tStage %d: X=%6.2f, Y=%6.2f\n", i+2, x, y);
     }
 
