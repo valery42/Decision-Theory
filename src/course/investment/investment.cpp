@@ -8,8 +8,9 @@ using State = Money;
 using Win = Money;
 using Control = Money;
 
-const int N = 10; // discretization level
-const int R = 9; // at the last stage X must be equal to K/9
+const int N =  2; // K discretization level
+const int M = 20; // X discretization level
+const int R =  9; // at the last stage X must be equal to K/9
 
 struct Stage {
     State* K;
@@ -78,8 +79,10 @@ void solve(Money K, int m, bool print_tables = false) {
     }
 
     for (int i = m - 1; i >= 0; i--) {
-        Money k_curr = balance1(K, i);
-        Money k_step = (balance2(K, i) - k_curr) / N;
+        Money k_min = balance1(K, i);
+        Money k_max = balance2(K, i);
+        Money k_step = (k_max - k_min) / N;
+        Money k_curr = k_min;
         int j;
         if (i == 0) {
             j = N;
@@ -89,10 +92,10 @@ void solve(Money K, int m, bool print_tables = false) {
         SKIP_LABEL:
             stages[i].K[j] = k_curr;
             Money x_curr = 0;
-            Money x_step = k_curr / N;
+            Money x_step = k_curr / M;
             Money x_best = -1;
             Money w_best = -1;
-            for (int k = 0; k <= N; k++) {
+            for (int k = 0; k <= M; k++) {
                 if (i == m - 1) {
                     x_best = k_curr / R;
                     w_best = income(k_curr, x_best);
