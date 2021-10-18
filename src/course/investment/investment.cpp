@@ -38,11 +38,11 @@ void print_stage(const Stage* s, int n) {
 }
 
 Money income1(Money X) {
-    return 150 + 0.8*pow(X, 2.0/3);
+    return 150 + 0.8*pow(X, 0.67);
 }
 
 Money income2(Money Y) {
-    return 110 + 1.6*pow(Y, 2.0/3);
+    return 110 + 1.6*pow(Y, 0.67);
 }
 
 Money income(Money K, Money X) {
