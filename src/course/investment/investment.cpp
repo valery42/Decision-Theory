@@ -1,3 +1,5 @@
+#include <algorithm>
+
 #include <cmath>
 #include <cstdio>
 #include <cstdlib>
@@ -8,9 +10,9 @@ using State = Money;
 using Win = Money;
 using Control = Money;
 
-const int N =  2; // K discretization level
-const int M = 20; // X discretization level
-const int R =  9; // at the last stage X must be equal to K/9
+const int N = 1000; // K discretization level
+const int M = 1000; // X discretization level
+const int R =    9; // at the last stage X must be equal to K/9
 
 struct Stage {
     State* K;
@@ -101,10 +103,8 @@ void solve(Money K, int m, bool print_tables = false) {
                     w_best = income(k_curr, x_best);
                 } else {
                     Money k_next = balance(k_curr, x_curr, 1);
-                    int idx = 0;
-                    while (k_next >= stages[i+1].K[idx]) {
-                        idx++;
-                    }
+                    auto upper = std::upper_bound(stages[i+1].K, &stages[i+1].K[N], k_next);
+                    auto idx = std::distance(stages[i+1].K, upper);
                     Money w_curr = income(k_curr, x_curr) + stages[i+1].w[idx-1];
                     if (w_curr > w_best) {
                         w_best = w_curr;
@@ -134,10 +134,8 @@ void solve(Money K, int m, bool print_tables = false) {
     printf("\tStage 1: X=%6.2f, Y=%6.2f\n", x, y);
     for (int i = 0; i < m - 1; i++) {
         Money k_next = balance(x+y, x, 1);
-        int idx = 0;
-        while (k_next >= stages[i+1].K[idx]) {
-            idx++;
-        }
+        auto upper = std::upper_bound(stages[i+1].K, &stages[i+1].K[N], k_next);
+        auto idx = std::distance(stages[i+1].K, upper);
         x = stages[i+1].X[idx-1];
         y = stages[i+1].K[idx-1] - x;
         printf("\tStage %d: X=%6.2f, Y=%6.2f\n", i+2, x, y);
@@ -151,5 +149,5 @@ void solve(Money K, int m, bool print_tables = false) {
 int main() {
     const Money K = 185;
     const int m = 4;
-    solve(K, m, true);
+    solve(K, m, false);
 }
