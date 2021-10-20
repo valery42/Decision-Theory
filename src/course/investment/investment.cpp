@@ -64,7 +64,7 @@ Money balance(Money K, Money X, int m) {
     return balance1(X, m) + balance2(K-X, m);
 }
 
-void solve(Money K, int m, bool print_tables = false) {
+void solve(Money K, int m, bool print_csv = false, bool print_tables = false) {
     // K - initial amount of investment
     // m - # of stages
     if (K <= 0) {
@@ -75,6 +75,12 @@ void solve(Money K, int m, bool print_tables = false) {
         fputs("error: Number of stages 'm' must be greater than zero.\n", stderr);
         exit(EXIT_FAILURE);
     }
+
+    FILE* fd = NULL;
+    if (print_csv) {
+        fd = fopen("data.csv", "w");
+    }
+
     Stage stages[m];
     for (int i = 0; i < m; i++) {
         init_stage(&stages[i], N+1);
@@ -101,11 +107,17 @@ void solve(Money K, int m, bool print_tables = false) {
                 if (i == m - 1) {
                     x_best = k_curr / R;
                     w_best = income(k_curr, x_best);
+                    if (fd != NULL) {
+                        fprintf(fd, "%.2f,%.2f,%.2f\n", k_curr, x_best, w_best);
+                    }
                 } else {
                     Money k_next = balance(k_curr, x_curr, 1);
                     auto upper = std::upper_bound(stages[i+1].K, &stages[i+1].K[N], k_next);
                     auto idx = std::distance(stages[i+1].K, upper);
                     Money w_curr = income(k_curr, x_curr) + stages[i+1].w[idx-1];
+                    if (fd != NULL) {
+                        fprintf(fd, "%.2f,%.2f,%.2f\n", k_curr, x_curr, w_curr);
+                    }
                     if (w_curr > w_best) {
                         w_best = w_curr;
                         x_best = x_curr;
@@ -116,7 +128,14 @@ void solve(Money K, int m, bool print_tables = false) {
             stages[i].w[j] = w_best;
             stages[i].X[j] = x_best;
             k_curr += k_step;
+            if (fd != NULL) {
+                fputs("\n", fd);
+            }
         }
+    }
+
+    if (fd != NULL) {
+        fclose(fd);
     }
 
     if (print_tables) {
@@ -149,5 +168,5 @@ void solve(Money K, int m, bool print_tables = false) {
 int main() {
     const Money K = 185;
     const int m = 4;
-    solve(K, m, false);
+    solve(K, m, false, false);
 }
